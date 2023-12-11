@@ -37,7 +37,7 @@ app.post('/videos/searcher', async (req, res) => {
         .then(async (result)=> {
             const response=result;
             const data=  await ytsr(req.body.search,{type:"playlist",limit:2})
-            res.json({items:[...response.items, data.items]})
+            res.json({items:[...data.items,response.items]})
         })
         .catch(error=>res.status(500).json(error))
 })
