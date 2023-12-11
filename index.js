@@ -11,11 +11,32 @@ app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//get videos
+app.get('/videos', async (req, res) => {
+    await ytsr("trending music",{limit:100})
+    .then(result=>res.json(result))
+    .catch(error=>res.status(500).json(error))
+});
+
+//search videos by string
+app.post('/videos/search', async (req, res) => {  
+  await ytsr(req.body.search,{limit:100})
+  .then(result=>res.json(result))
+   .catch(error=>res.status(500).json(error))
+})
+
+// app.post('/videos/search/playlist', async (req, res) => {
+//     await ytsr(req.body.search,{type:"playlist",limit:10})
+//         .then( result=> res.json(result))
+//         .catch(error=>res.status(500).json(error))
+// })
+
+
 app.post('/videos/searcher', async (req, res) => {
-    await ytsr(req.body.search,{limit:50})
+    await ytsr(req.body.search,{limit:30})
         .then(async (result)=> {
             const response=result;
-            const data=  await ytsr(req.body.search,{type:"playlist",limit:10})
+            const data=  await ytsr(req.body.search,{type:"playlist",limit:2})
             res.json({items:[...response.items, data.items]})
         })
         .catch(error=>res.status(500).json(error))
