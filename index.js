@@ -41,7 +41,20 @@ app.post('/videos/searcher', async (req, res) => {
         })
         .catch(error=>res.status(500).json(error))
 })
-
+//search video and playlists
+app.post('/videos/lists', async (req, res) => {
+    //  return res.json("hello")
+    try{
+     const videos=await ytsr(req.body.search)
+     const data=  await ytsr(req.body.search,{type:"playlist",limit:3})
+     //return res.json(data)
+     if(videos !=null){
+      return res.json({items:[...videos,data?.items]})
+    }
+    }catch(e){
+      return res.json(e)
+    }
+})
 // app.post("/video",async (req,res)=>{
 //     try{
 //         // const filters1 = await ytsr.getFilters('github');
